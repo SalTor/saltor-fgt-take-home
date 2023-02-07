@@ -9,6 +9,7 @@ import styles from "src/styles/products.module.css";
 
 export default function Product(props: { details: Product | null }) {
   const addToCart = useCartStore((state) => state.addToCart);
+  const toggleShowCart = useCartStore((state) => state.toggleCartOpen);
   const { details: data } = props;
   if (!data) return <p>sorry no product details ATM</p>;
   return (
@@ -16,19 +17,30 @@ export default function Product(props: { details: Product | null }) {
       <Head>
         <title>Products/{data.title}</title>
       </Head>
-      <div className={styles.productPage}>
-        <Image
-          className={styles.productShot}
-          src={data.thumbnail.src}
-          height={557}
-          width={554}
-          alt={data.thumbnail.alt || data.title}
-        />
-        <article className={styles.productBody}>
-          <h1>{data.title}</h1>
+
+      <div className="flex gap-5">
+        <div className="relative w-3/5 h-[500px] rounded-md truncate">
+          <Image
+            src={data.thumbnail.src}
+            fill
+            alt={data.thumbnail.alt || data.title}
+          />
+        </div>
+
+        <aside className="w-2/5 bg-white truncate rounded-md whitespace-normal p-4">
+          <h1 className="text-3xl">{data.title}</h1>
+          <p className="my-4">About</p>
           <p>{data.body}</p>
-          <button onClick={() => addToCart(data)}>add to cart</button>
-        </article>
+          <button
+            className="mt-6 w-full p-4 text-center text-2xl bg-[#CD0100] text-white rounded-md"
+            onClick={() => {
+              addToCart(data);
+              toggleShowCart();
+            }}
+          >
+            Add to Cart
+          </button>
+        </aside>
       </div>
     </>
   );

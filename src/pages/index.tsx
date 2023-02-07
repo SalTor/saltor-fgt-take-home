@@ -4,25 +4,30 @@ import Link from "next/link";
 
 import catalog from "src/pages/api/FGT-Frontend-Take-Home";
 
-import styles from "src/styles/products.module.css";
-
 export default function Home(props: Catalog) {
   return (
     <>
       <Head>
         <title>Fast Growing Trees</title>
       </Head>
-      <section className={styles.productWrap}>
+
+      <section className="grid grid-cols-3 gap-7">
         {props.products.map((product) => (
           <Link href={`/products/${product.id}`} key={product.id}>
-            <article className={styles.product}>
+            <article
+              className="rounded-md truncate bg-white border border-solid border-[#c4c4c4]"
+              style={{ boxShadow: "0px 2px 4px 0px rgba(0,0,0,0.1)" }}
+            >
               <Image
                 src={product.thumbnail.src}
                 width={281}
                 height={253}
                 alt={product.thumbnail.alt || product.title}
               />
-              <span className={styles.productName}>{product.title}</span>
+
+              <div className="flex justify-center items-center text-center w-8/12 whitespace-normal m-auto h-[76px]">
+                <span>{product.title}</span>
+              </div>
             </article>
           </Link>
         ))}

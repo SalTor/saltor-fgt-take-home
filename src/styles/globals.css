@@ -32,8 +32,8 @@ body {
 
 body {
   background: var(--background);
-  padding: 60px;
   font-size: 16px;
+  padding-top: 33px;
 }
 
 a {
