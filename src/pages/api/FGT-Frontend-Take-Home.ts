@@ -260,7 +260,7 @@ export default {
         alt: null,
         width: 600,
         height: 600,
-        src: "https://cdn.shopify.com/s/files/1/0059/8835/2052/products/Thuja_Green_Giant_Tree_FGT_600x600_3bbb9f56-7eb1-481b-bc0e-5b78c0248445.jpg?v=1599038135",
+        src: "https://cdn.shopify.com/s/files/1/0059/8835/2052/products/Thuja_Green_Giant_Tree_2_FGT.jpg?v=1599038137",
         variant_ids: [],
       },
     },
