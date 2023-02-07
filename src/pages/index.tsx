@@ -1,8 +1,10 @@
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
+
+import catalog from "src/pages/api/FGT-Frontend-Take-Home";
+
 import styles from "src/styles/products.module.css";
-import catalog from "./api/FGT-Frontend-Take-Home";
 
 export default function Home(props: Catalog) {
   return (
@@ -12,8 +14,8 @@ export default function Home(props: Catalog) {
       </Head>
       <section className={styles.productWrap}>
         {props.products.map((product) => (
-          <Link href={`/products/${product.id}`}>
-            <article key={product.id} className={styles.product}>
+          <Link href={`/products/${product.id}`} key={product.id}>
+            <article className={styles.product}>
               <Image
                 src={product.thumbnail.src}
                 width={281}

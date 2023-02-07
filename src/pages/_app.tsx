@@ -1,7 +1,9 @@
-import "src/styles/globals.css";
 import type { AppProps } from "next/app";
 import Image from "next/image";
+
 import { create } from "zustand";
+
+import "src/styles/globals.css";
 
 export const useCartStore = create<{
   isCartOpen: boolean;

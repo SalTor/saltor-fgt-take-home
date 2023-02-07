@@ -1,8 +1,11 @@
 import type { GetStaticPropsContext } from "next";
-import Image from "next/image";
-import catalog from "../api/FGT-Frontend-Take-Home";
-import styles from "src/styles/products.module.css";
 import Head from "next/head";
+import Image from "next/image";
+
+import catalog from "src/pages/api/FGT-Frontend-Take-Home";
+
+import styles from "src/styles/products.module.css";
+
 export default function Product(props: { details: Product | null }) {
   if (!props.details) return <p>sorry no product details ATM</p>;
   const { details: data } = props;

@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+
 import catalog from "../FGT-Frontend-Take-Home";
 export default function productsHandler(
   req: NextApiRequest,
