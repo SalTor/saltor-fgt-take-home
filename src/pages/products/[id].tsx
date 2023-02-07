@@ -2,13 +2,15 @@ import type { GetStaticPropsContext } from "next";
 import Head from "next/head";
 import Image from "next/image";
 
+import { useCartStore } from "src/pages/_app";
 import catalog from "src/pages/api/FGT-Frontend-Take-Home";
 
 import styles from "src/styles/products.module.css";
 
 export default function Product(props: { details: Product | null }) {
-  if (!props.details) return <p>sorry no product details ATM</p>;
+  const addToCart = useCartStore((state) => state.addToCart);
   const { details: data } = props;
+  if (!data) return <p>sorry no product details ATM</p>;
   return (
     <>
       <Head>
@@ -25,6 +27,7 @@ export default function Product(props: { details: Product | null }) {
         <article className={styles.productBody}>
           <h1>{data.title}</h1>
           <p>{data.body}</p>
+          <button onClick={() => addToCart(data)}>add to cart</button>
         </article>
       </div>
     </>

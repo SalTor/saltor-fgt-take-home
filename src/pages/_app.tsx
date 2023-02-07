@@ -5,32 +5,57 @@ import { create } from "zustand";
 
 import "src/styles/globals.css";
 
+type CartItem = { count: number; product: Product };
+
 export const useCartStore = create<{
   isCartOpen: boolean;
   toggleCartOpen(): void;
-  currentCart: Product[];
+  cart: () => CartItem[];
+  currentCart: Record<number, CartItem>;
   addToCart(id: Product): void;
-}>((set) => ({
+}>((set, get) => ({
   isCartOpen: false,
   toggleCartOpen: () => set((state) => ({ isCartOpen: !state.isCartOpen })),
-  currentCart: [],
+  currentCart: {},
+  cart: () => Object.values(get().currentCart),
   addToCart: (product) =>
-    set((state) => ({ currentCart: [...state.currentCart, product] })),
+    set((state) => {
+      const existing = state.currentCart[product.id];
+      if (existing) {
+        return {
+          currentCart: {
+            ...state.currentCart,
+            [product.id]: {
+              ...existing,
+              count: existing.count + 1,
+            },
+          },
+        };
+      }
+      return {
+        currentCart: {
+          ...state.currentCart,
+          [product.id]: { count: 1, product },
+        },
+      };
+    }),
 }));
 
 export default function App({ Component, pageProps }: AppProps) {
   const isCartOpen = useCartStore((state) => state.isCartOpen);
   const toggleCartOpen = useCartStore((state) => state.toggleCartOpen);
+  const cart = useCartStore((state) => state.cart);
   const handleCart = () => {
     toggleCartOpen();
   };
+
   return (
     <>
       <nav
         style={{
           display: "flex",
           justifyContent: "space-between",
-          // flexDirection: "row-reverse", // TODO: reverse for release
+          flexDirection: "row-reverse", // TODO: reverse for release
         }}
       >
         <Image src="/images/logo.svg" height={50} width={50} alt="Logo" />
@@ -75,6 +100,11 @@ export default function App({ Component, pageProps }: AppProps) {
             }}
           >
             <p>YOUR CART</p>
+            {cart().map((c) => (
+              <p>
+                {c.product.id} x {c.count}
+              </p>
+            ))}
           </div>
         </div>
       )}
