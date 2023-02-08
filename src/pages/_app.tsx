@@ -110,6 +110,33 @@ export default function App({ Component, pageProps }: AppProps) {
     return null;
   }, [currentCart, router.query]);
 
+  const cartSum = useMemo(() => {
+    return Object.values(currentCart).reduce(
+      (acc, curr) => (acc += curr.product.price * curr.count),
+      0
+    );
+  }, [currentCart]);
+
+  const {
+    isEligibleForFreeShipping,
+    freeShippingProgressPercent,
+    freeShippingProgressDollars,
+  } = useMemo(() => {
+    return {
+      isEligibleForFreeShipping: cartSum > 0 && cartSum < 150,
+      freeShippingProgressDollars: 150 - cartSum,
+      freeShippingProgressPercent: `${(
+        (1 - (150 - cartSum) / 150) *
+        100
+      ).toFixed(0)}%`,
+    };
+  }, [currentCart, cartSum]);
+  console.log({
+    isEligibleForFreeShipping,
+    freeShippingProgressPercent,
+    freeShippingProgressDollars,
+  });
+
   return (
     <>
       <main className="w-5/6 lg:w-4/5 xl:w-3/5 2xl:w-2/5 m-auto">
@@ -139,7 +166,7 @@ export default function App({ Component, pageProps }: AppProps) {
               className="absolute top-0 right-0 bottom-0 left-0"
               onClick={() => toggleCartOpen()}
             />
-            <div className="absolute top-0 right-0 bottom-0 h-full bg-white p-[20px] pt-[60px] w-3/4 md:w-4/6 lg:w-3/6 xl:w-[600px] overflow-y-scroll">
+            <div className="absolute top-0 right-0 bottom-0 h-full bg-white p-[20px] pt-[60px] w-3/4 md:w-4/6 lg:w-3/6 xl:w-[600px] overflow-y-scroll max-w-[440px]">
               <button
                 className="absolute top-6 left-6"
                 onClick={() => toggleCartOpen()}
@@ -162,9 +189,31 @@ export default function App({ Component, pageProps }: AppProps) {
               </button>
 
               <div className="mt-6">
-                {/* spacing */}
-                {/* $x away from free shipping! */}
-                {/* progress bar */}
+                {isEligibleForFreeShipping && (
+                  <div className="mb-3 text-center">
+                    {freeShippingProgressDollars < 0 ? (
+                      <p className="">Free shipping for you!</p>
+                    ) : (
+                      <div>
+                        <p className="mb-3">
+                          You're{" "}
+                          <span className="font-medium">
+                            ${freeShippingProgressDollars.toFixed(2)}
+                          </span>{" "}
+                          away from free shipping!
+                        </p>
+                        <div className="w-full bg-[#d7dad2] h-3">
+                          <div
+                            className="bg-[#155343] h-3"
+                            style={{
+                              width: freeShippingProgressPercent,
+                            }}
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
 
                 {Object.values(currentCart)
                   .length /* TODO: figure out a computed value for this instead of running Object.values on every render */ ? (
@@ -176,7 +225,7 @@ export default function App({ Component, pageProps }: AppProps) {
                           className="flex px-3 place-content-between"
                         >
                           <div className="flex">
-                            <div className="relative h-28 w-28">
+                            <div className="relative min-h-28 min-w-28 h-28 w-28">
                               <Image
                                 src={c.product.thumbnail.src}
                                 fill
@@ -231,13 +280,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
                       <div className="my-6 flex justify-between text-lg">
                         <p className="font-medium">Subtotal</p>$
-                        {Object.values(currentCart)
-                          .reduce(
-                            (acc, curr) =>
-                              (acc += curr.product.price * curr.count),
-                            0
-                          )
-                          .toFixed(2)}
+                        {cartSum.toFixed(2)}
                       </div>
                     </div>
 
@@ -259,7 +302,9 @@ export default function App({ Component, pageProps }: AppProps) {
                                 alt={r.thumbnail.alt || r.title}
                               />
                             </div>
-                            <h1 className="text-xl">{r.title}</h1>
+
+                            <h1 className="text-lg font-medium">{r.title}</h1>
+
                             <button onClick={() => addToCart(r)}>
                               <Image
                                 src="/images/circle-plus.svg"
