@@ -10,8 +10,8 @@ import styles from "src/styles/products.module.css";
 export default function Product(props: { details: Product | null }) {
   const addToCart = useCartStore((state) => state.addToCart);
   const toggleShowCart = useCartStore((state) => state.toggleCartOpen);
-  const { details: data } = props;
-  if (!data) return <p>sorry no product details ATM</p>;
+  const { details: data, fallback } = props;
+  if (!data) return <p>Loading ...</p>;
   return (
     <>
       <Head>
@@ -19,11 +19,11 @@ export default function Product(props: { details: Product | null }) {
       </Head>
 
       <div className="flex flex-col md:flex-row md:gap-5 items-start">
-        <h1 className="sm:hidden text-3xl text-center mb-5 underline">
+        <h1 className="md:hidden text-3xl mx-auto text-center mb-5 underline">
           {data.title}
         </h1>
 
-        <div className="relative w-[300px] md:w-3/5 h-[300px] md:h-[500px] rounded-md truncate m-5 mt-0 md:m-0">
+        <div className="relative w-[300px] md:w-3/5 h-[300px] md:h-[500px] rounded-md truncate mx-auto mb-5 mt-0 md:m-0">
           <Image
             src={data.thumbnail.src}
             fill
@@ -32,9 +32,9 @@ export default function Product(props: { details: Product | null }) {
         </div>
 
         <aside className="md:w-2/5 bg-white truncate rounded-md whitespace-normal p-4">
-          <h1 className="text-3xl hidden sm:flex">{data.title}</h1>
+          <h1 className="text-3xl hidden md:flex">{data.title}</h1>
 
-          <p className="my-4 font-medium hidden sm:flex">About</p>
+          <p className="my-4 font-medium hidden md:flex">About</p>
 
           <p>{data.body}</p>
 
