@@ -18,8 +18,12 @@ export default function Product(props: { details: Product | null }) {
         <title>Products/{data.title}</title>
       </Head>
 
-      <div className="flex gap-5">
-        <div className="relative w-3/5 h-[500px] rounded-md truncate">
+      <div className="flex flex-col md:flex-row md:gap-5 items-start">
+        <h1 className="sm:hidden text-3xl text-center mb-5 underline">
+          {data.title}
+        </h1>
+
+        <div className="relative w-[300px] md:w-3/5 h-[300px] md:h-[500px] rounded-md truncate m-5 mt-0 md:m-0">
           <Image
             src={data.thumbnail.src}
             fill
@@ -27,15 +31,19 @@ export default function Product(props: { details: Product | null }) {
           />
         </div>
 
-        <aside className="w-2/5 bg-white truncate rounded-md whitespace-normal p-4">
-          <h1 className="text-3xl">{data.title}</h1>
-          <p className="my-4">About</p>
+        <aside className="md:w-2/5 bg-white truncate rounded-md whitespace-normal p-4">
+          <h1 className="text-3xl hidden sm:flex">{data.title}</h1>
+
+          <p className="my-4 font-medium hidden sm:flex">About</p>
+
           <p>{data.body}</p>
+
           <button
-            className="mt-6 w-full p-4 text-center text-2xl bg-[#CD0100] text-white rounded-md"
+            className="mt-6 w-full p-4 py-2.5 text-center text-2xl bg-[#CD0100] text-white rounded-md"
             onClick={() => {
               addToCart(data);
               toggleShowCart();
+              window.scrollTo(0, 0);
             }}
           >
             Add to Cart

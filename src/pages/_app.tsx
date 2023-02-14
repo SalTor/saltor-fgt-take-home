@@ -1,5 +1,6 @@
 import type { AppProps } from "next/app";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/router";
 
 import { useMemo } from "react";
@@ -118,30 +119,31 @@ export default function App({ Component, pageProps }: AppProps) {
   }, [currentCart]);
 
   const {
-    isEligibleForFreeShipping,
+    showShippingCopy,
     freeShippingProgressPercent,
     freeShippingProgressDollars,
   } = useMemo(() => {
     return {
-      isEligibleForFreeShipping: cartSum > 0 && cartSum < 150,
+      showShippingCopy: cartSum > 0,
       freeShippingProgressDollars: 150 - cartSum,
       freeShippingProgressPercent: `${(
         (1 - (150 - cartSum) / 150) *
         100
       ).toFixed(0)}%`,
     };
-  }, [currentCart, cartSum]);
-  console.log({
-    isEligibleForFreeShipping,
-    freeShippingProgressPercent,
-    freeShippingProgressDollars,
-  });
+  }, [cartSum]);
 
   return (
     <>
       <main className="w-5/6 lg:w-4/5 xl:w-3/5 2xl:w-2/5 m-auto">
-        <nav className="flex justify-between mb-5 w-full">
-          <Image src="/images/logo.svg" height={38} width={30} alt="Logo" />
+        <nav
+          className={`flex justify-between mb-${
+            router.pathname === "/" ? "5" : "8"
+          } w-full`}
+        >
+          <Link href="/">
+            <Image src="/images/logo.svg" height={38} width={30} alt="Logo" />
+          </Link>
 
           <button onClick={toggleCartOpen} className="relative">
             <Image
@@ -151,7 +153,10 @@ export default function App({ Component, pageProps }: AppProps) {
               alt="Logo"
             />
             {productBadge && (
-              <span className="absolute top-0 right-0 text-xs h-5 w-5 flex justify-center items-center text-white text-center bg-[red] rounded-full">
+              <span
+                className="absolute -top-1 -right-1 h-4 w-4 flex justify-center items-center text-white text-center bg-[red] rounded-full"
+                style={{ fontSize: 8 }}
+              >
                 <span>{productBadge}</span>
               </span>
             )}
@@ -166,7 +171,8 @@ export default function App({ Component, pageProps }: AppProps) {
               className="absolute top-0 right-0 bottom-0 left-0"
               onClick={() => toggleCartOpen()}
             />
-            <div className="absolute top-0 right-0 bottom-0 h-full bg-white p-[20px] pt-[60px] w-3/4 md:w-4/6 lg:w-3/6 xl:w-[600px] overflow-y-scroll max-w-[440px]">
+
+            <div className="absolute top-0 right-0 bottom-0 h-full bg-white p-[20px] pt-[60px] w-full sm:w-3/4 md:w-4/6 lg:w-3/6 xl:w-[600px] overflow-y-scroll max-w-[440px]">
               <button
                 className="absolute top-6 left-6"
                 onClick={() => toggleCartOpen()}
@@ -179,7 +185,7 @@ export default function App({ Component, pageProps }: AppProps) {
                 />
               </button>
 
-              <button className="absolute left-1/2 top-6">
+              <button className="absolute left-1/2 top-6 -translate-x-0.5">
                 <Image
                   src="/images/cart.svg"
                   height={40}
@@ -189,14 +195,14 @@ export default function App({ Component, pageProps }: AppProps) {
               </button>
 
               <div className="mt-6">
-                {isEligibleForFreeShipping && (
-                  <div className="mb-3 text-center">
+                {showShippingCopy && (
+                  <div className="mb-8 text-center">
                     {freeShippingProgressDollars < 0 ? (
-                      <p className="">Free shipping for you!</p>
+                      <p>Free shipping for you!</p>
                     ) : (
                       <div>
                         <p className="mb-3">
-                          You're{" "}
+                          You&apos;re{" "}
                           <span className="font-medium">
                             ${freeShippingProgressDollars.toFixed(2)}
                           </span>{" "}
@@ -222,10 +228,18 @@ export default function App({ Component, pageProps }: AppProps) {
                       {Object.values(currentCart).map((c) => (
                         <article
                           key={c.product.id}
-                          className="flex px-3 place-content-between"
+                          className="flex px-3 mb-3 place-content-between"
                         >
                           <div className="flex">
-                            <div className="relative min-h-28 min-w-28 h-28 w-28">
+                            <div
+                              className="relative"
+                              style={{
+                                height: 110,
+                                width: 110,
+                                minHeight: 110,
+                                minWidth: 110,
+                              }}
+                            >
                               <Image
                                 src={c.product.thumbnail.src}
                                 fill
@@ -250,7 +264,9 @@ export default function App({ Component, pageProps }: AppProps) {
                                   />
                                 </button>
 
-                                <div className="mx-2 text-lg">{c.count}</div>
+                                <div className="mx-2 text-md leading-none">
+                                  {c.count}
+                                </div>
 
                                 <button onClick={() => addToCart(c.product)}>
                                   <Image
@@ -295,7 +311,15 @@ export default function App({ Component, pageProps }: AppProps) {
                             key={r.id}
                             className="flex justify-between items-center p-5 mb-3"
                           >
-                            <div className="relative h-28 w-28">
+                            <div
+                              className="relative"
+                              style={{
+                                height: 110,
+                                width: 110,
+                                minHeight: 110,
+                                minWidth: 110,
+                              }}
+                            >
                               <Image
                                 src={r.thumbnail.src}
                                 fill
@@ -303,7 +327,11 @@ export default function App({ Component, pageProps }: AppProps) {
                               />
                             </div>
 
-                            <h1 className="text-lg font-medium">{r.title}</h1>
+                            <span>
+                              <h1 className="text-lg font-medium grow-1 w-[170px]">
+                                {r.title}
+                              </h1>
+                            </span>
 
                             <button onClick={() => addToCart(r)}>
                               <Image
@@ -311,6 +339,7 @@ export default function App({ Component, pageProps }: AppProps) {
                                 height={35}
                                 width={35}
                                 alt="Add to cart"
+                                style={{ minWidth: 35, minHeight: 35 }}
                               />
                             </button>
                           </article>
