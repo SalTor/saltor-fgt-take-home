@@ -2,16 +2,18 @@ import type { GetStaticPropsContext } from "next";
 import Head from "next/head";
 import Image from "next/image";
 
-import { useCartStore } from "src/pages/_app";
 import catalog from "src/pages/api/FGT-Frontend-Take-Home";
-
-import styles from "src/styles/products.module.css";
+import { useCartStore } from "src/stores/cart";
 
 export default function Product(props: { details: Product | null }) {
-  const addToCart = useCartStore((state) => state.addToCart);
-  const toggleShowCart = useCartStore((state) => state.toggleCartOpen);
   const { details: data, fallback } = props;
+  const [addToCart, toggleShowCart] = useCartStore((state) => [
+    state.addToCart,
+    state.toggleCartOpen,
+  ]);
+
   if (!data) return <p>Loading ...</p>;
+
   return (
     <>
       <Head>
@@ -27,6 +29,7 @@ export default function Product(props: { details: Product | null }) {
           <Image
             src={data.thumbnail.src}
             fill
+            sizes="100%"
             alt={data.thumbnail.alt || data.title}
           />
         </div>
