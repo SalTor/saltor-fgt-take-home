@@ -1,5 +1,3 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
 ## Running locally
 
 Install dependencies (project uses pnpm) and then run the dev server
@@ -23,3 +21,6 @@ npm run test
 ## To do
 - [ ] Implement tests that are outlined
 - [ ] Add storybook to quickly demo components + functionalities
+
+## Also
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
