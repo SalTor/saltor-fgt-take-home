@@ -14,6 +14,8 @@ export default function Product(props: { details: Product | null }) {
 
   if (!data) return <p>Loading ...</p>;
 
+  const img = data.images[0] || data.thumbnail;
+
   return (
     <>
       <Head>
@@ -27,10 +29,10 @@ export default function Product(props: { details: Product | null }) {
 
         <div className="relative w-[300px] md:w-3/5 h-[300px] md:h-[500px] rounded-md truncate mx-auto mb-5 mt-0 md:m-0">
           <Image
-            src={data.thumbnail.src}
-            fill
-            sizes="100%"
-            alt={data.thumbnail.alt || data.title}
+            src={img.src}
+            height={img.height}
+            width={img.width}
+            alt={img.alt || data.title}
           />
         </div>
 

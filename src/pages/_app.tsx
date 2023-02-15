@@ -27,7 +27,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <>
-      <main className="w-5/6 lg:w-4/5 xl:w-3/5 2xl:w-2/5 m-auto">
+      <main className="m-auto max-w-[1024px] px-[60px]">
         <nav
           className={`flex justify-between mb-${
             router.pathname === "/" ? "5" : "8"
